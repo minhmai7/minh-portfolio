@@ -169,7 +169,7 @@ const Home = () => {
                   whileTap={{ scale: 0.95 }}
                 >
                   <FiDownload className="text-lg" />
-                  Download CV
+                  Download Resume
                 </motion.button>
                 <Social 
                   containerStyles="flex gap-6" 
