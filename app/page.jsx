@@ -381,13 +381,13 @@ const Home = () => {
         {/* Projects Section */}
         <motion.section 
           id="projects-section" 
-          className="min-h-screen py-16 bg-background"
+          className="min-h-screen bg-background scroll-mt-[120]"
           initial="initial"
           whileInView="animate"
           viewport={{ amount: 0.2, once: true }}
           variants={animations.staggerContainer}
         >
-          <div className="container mx-auto min-h-screen flex items-center">
+          <div className="container mx-auto min-h-screen flex">
             <div className="max-w-7xl mx-auto space-y-16 w-full px-4">
               <motion.div 
                 className="text-center"

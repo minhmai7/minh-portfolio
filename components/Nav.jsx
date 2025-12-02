@@ -31,16 +31,18 @@ const Nav = () => {
   }, []);
 
   const scrollToSection = (targetId) => {
-    const element = document.getElementById(targetId);
-    if (element) {
-      const headerHeight = 100; // Account for fixed header height
-      const elementPosition = element.offsetTop - headerHeight;
-      window.scrollTo({
-        top: elementPosition,
-        behavior: 'smooth'
-      });
-    }
-  };
+  const element = document.getElementById(targetId);
+  if (element) {
+    const headerHeight = 100;
+
+    const elementPosition = element.offsetTop - headerHeight;
+
+    window.scrollTo({
+      top: elementPosition,
+      behavior: 'smooth'
+    });
+  }
+};
     
   return (
     <nav className="flex gap-8">
