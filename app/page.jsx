@@ -10,6 +10,8 @@ import { Mail, Phone, MapPin } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
 import emailjs from '@emailjs/browser';
 import Social from "@/components/Social";
+import TechStack from "@/components/TechStack";
+import Skills from "@/components/Skills";
 import { FaCoffee } from "react-icons/fa";
 
 // Typing Animation Component
@@ -41,8 +43,6 @@ const TypingAnimation = ({ text, delay = 0, showCursor = true }) => {
 const animations = {
   fadeInUp: { initial: { opacity: 0, y: 60 }, animate: { opacity: 1, y: 0 }, transition: { duration: 0.6, ease: "easeOut" } },
   fadeInDown: { initial: { opacity: 0, y: -30 }, animate: { opacity: 1, y: 0 }, transition: { duration: 0.6, ease: "easeOut" } },
-  fadeInLeft: { initial: { opacity: 0, x: -50 }, animate: { opacity: 1, x: 0 }, transition: { duration: 0.6, ease: "easeOut" } },
-  fadeInRight: { initial: { opacity: 0, x: 50 }, animate: { opacity: 1, x: 0 }, transition: { duration: 0.6, ease: "easeOut" } },
   staggerContainer: { initial: { opacity: 0 }, animate: { opacity: 1, transition: { staggerChildren: 0.15, delayChildren: 0.3 } } },
   staggerItem: { initial: { opacity: 0, y: 30 }, animate: { opacity: 1, y: 0 } },
   heroStagger: { initial: { opacity: 0 }, animate: { opacity: 1, transition: { staggerChildren: 0.3, delayChildren: 0.2 } } },
@@ -105,15 +105,15 @@ const Home = () => {
   }, []);
 
   return (
-   <section id="hero-section" className="pt-24 pb-12 xl:pt-32 xl:pb-0 min-h-screen">
-      <div className="container mx-auto min-h-screen">
+    <>
+      <section id="hero-section" className="pt-24 pb-12 xl:pt-32 xl:pb-0 min-h-screen">
+        <div className="container mx-auto min-h-screen">
         <motion.div 
           className="flex flex-col xl:flex-row items-center justify-between xl:pt-8 xl:pb-24 gap-8"
           initial="initial"
           animate="animate"
           variants={animations.heroStagger}
         >
-          {/* Main text */}
           <motion.div 
             className="order-2 xl:order-none text-center xl:text-left"
             variants={animations.staggerItem}
@@ -178,18 +178,8 @@ const Home = () => {
               </div>
             </motion.div>
           </motion.div>
-          {/* photo 
-          <motion.div 
-            className="order-1 xl:order-none mb-8 xl:mb-0"
-            variants={animations.heroFadeInUp}
-          >
-            <div className="w-[298px] h-[298px] xl:w-[498px] xl:h-[498px] bg-accent/20 rounded-full flex items-center justify-center">
-              photo
-            </div>
-          </motion.div>
         </motion.div>
         
-        {/* Scroll Indicator with visibility control */}
         <AnimatePresence>
           {showScrollIndicator && (
             <motion.div 
@@ -213,7 +203,6 @@ const Home = () => {
                 const aboutSection = document.getElementById('about-section');
                 aboutSection?.scrollIntoView({ behavior: 'smooth' });
               }}>
-                {/* Multiple chevrons for enhanced effect */}
                 <motion.div 
                   className="flex flex-col items-center space-y-1"
                   animate={{ 
@@ -245,26 +234,25 @@ const Home = () => {
             </motion.div>
           )}
         </AnimatePresence>
-        </motion.div>
-      </div>
+        </div>
+      </section>
         
-        {/* About Section */}
         <motion.section 
           id="about-section" 
-          className="min-h-screen py-8"
+          className="min-h-screen py-8 items-center"
           initial="initial"
           whileInView="animate"
           viewport={{ amount: 0.3, once: true }}
           variants={animations.staggerContainer}
         >
-          <div className="container mx-auto min-h-screen">
-            <div className="max-w-7xl mx-auto space-y-16 w-full px-4">
+          <div className="container mx-auto">
+            <div className="max-w-7xl mx-auto space-y-12 w-full px-4">
               <motion.div 
                 className="text-left -ml-4"
                 variants={animations.staggerItem}
               >
                 <motion.h1 
-                  className="h1 mb-8"
+                  className="h1 mb-6"
                   variants={animations.fadeInDown}
                 >
                   About <motion.span 
@@ -282,21 +270,19 @@ const Home = () => {
                 </motion.p>
               </motion.div>
               
-              {/* 4 Column Layout */}
               <motion.div 
-                className="grid md:grid-cols-4 gap-8 lg:gap-12"
+                className="grid md:grid-cols-2 xl:grid-cols-4 gap-6 lg:gap-8"
                 variants={animations.staggerContainer}
                 initial="initial"
                 whileInView="animate"
                 viewport={{ amount: 0.1 }}
               >
-                {/* Background Column */}
                 <motion.div 
                   className="space-y-6"
                   variants={animations.staggerItem}
                 >
                   <h2 className="text-2xl font-semibold text-accent mb-6">Background</h2>
-                  <div className="bg-accent/10 p-6 rounded-lg space-y-4">
+                  <div className="bg-accent/10 p-5 rounded-lg space-y-4">
                     <p className="text-white/80 text-sm leading-relaxed">
                       First-year student at UW Bothell planning to major in CSSE and Data Science.
                     </p>
@@ -306,79 +292,62 @@ const Home = () => {
                   </div>
                 </motion.div>
                 
-                {/* Education Column */}
                 <motion.div 
                   className="space-y-6"
                   variants={animations.staggerItem}
                 >
                   <h2 className="text-2xl font-semibold text-accent mb-6">Education</h2>
-                  <div className="space-y-4">
-                    <div className="bg-accent/10 p-5 rounded-lg">
-                      <h3 className="text-sm font-semibold text-accent mb-2">University of Washington, Bothell</h3>
+                  <div className="space-y-3">
+                    <div className="bg-accent/10 p-4 rounded-lg">
+                      <h3 className="text-sm font-semibold text-accent mb-1">University of Washington, Bothell</h3>
                       <p className="text-white/70 text-sm">Pre-Major</p>
-                      <p className="text-white/60 text-sm">Expected Graduation: 2029</p>
+                      <p className="text-white/60 text-xs">Expected Graduation: 2029</p>
                     </div>
-                    <div className="bg-accent/10 p-5 rounded-lg">
-                      <h3 className="text-sm font-semibold text-accent mb-2">Kennedy Catholic High School</h3>
+                    <div className="bg-accent/10 p-4 rounded-lg">
+                      <h3 className="text-sm font-semibold text-accent mb-1">Kennedy Catholic High School</h3>
                       <p className="text-white/70 text-sm">Salutatorian</p>
-                      <p className="text-white/60 text-sm">Graduated: May 2025</p>
+                      <p className="text-white/60 text-xs">Graduated: May 2025</p>
                     </div>
                   </div>
                 </motion.div>
 
-                {/* Skills Column */}
                 <motion.div 
-                  className="space-y-6"
                   variants={animations.staggerItem}
                 >
-                  <h2 className="text-2xl font-semibold text-accent mb-6">Skills</h2>
-                  <div className="space-y-4">
-                    <div className="bg-accent/10 p-5 rounded-lg">
-                      <h3 className="text-sm font-semibold text-accent mb-3">Frontend</h3>
-                      <ul className="text-white/70 text-sm space-y-1">
-                        <li>• React & Next.js</li>
-                        <li>• JavaScript/TypeScript</li>
-                        <li>• HTML5 & CSS3</li>
-                      </ul>
-                    </div>
-                    <div className="bg-accent/10 p-5 rounded-lg">
-                      <h3 className="text-sm font-semibold text-accent mb-3">Backend</h3>
-                      <ul className="text-white/70 text-sm space-y-1">
-                        <li>• Java & Python</li>
-                        <li>• Database Design</li>
-                        <li>• API Development</li>
-                      </ul>
-                    </div>
-                  </div>
+                  <Skills />
                 </motion.div>
 
-                {/* Hobbies Column */}
                 <motion.div 
                   className="space-y-6"
                   variants={animations.staggerItem}
                 >
                   <h2 className="text-2xl font-semibold text-accent mb-6">Hobbies</h2>
                   <div className="space-y-4">
-                    <div className="bg-accent/10 p-5 rounded-lg">
-                      <h3 className="text-sm font-semibold text-accent mb-2">Tech Explorer</h3>
-                      <p className="text-white/70 text-sm">I self learn new technologies and frameworks every day.</p>
-                    </div>
-                    <div className="bg-accent/10 p-5 rounded-lg">
+                    <div className="bg-accent/10 p-4 rounded-lg">
                       <h3 className="text-sm font-semibold text-accent mb-2">Problem/Puzzle Solving</h3>
                       <p className="text-white/70 text-sm">Coding problems, boardgames, and Gundams!</p>
                     </div>
-                    <div className="bg-accent/10 p-5 rounded-lg">
+                    <div className="bg-accent/10 p-4 rounded-lg">
                       <h3 className="text-sm font-semibold text-accent mb-2">Tennis & Food</h3>
                       <p className="text-white/70 text-sm">I love rallying. I also love spending all of my money on food. </p>
                     </div>
                   </div>
                 </motion.div>
               </motion.div>
+              
+              <motion.div
+                initial={{ opacity: 0, y: 30 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.8, delay: 0.4 }}
+                viewport={{ once: true }}
+                className="bg-background/5 rounded-2xl border-accent/10 overflow-hidden"
+              >
+                <TechStack />
+              </motion.div>
             </div>
           </div>
         </motion.section>
 
-        {/* Projects Section */}
         <motion.section 
           id="projects-section" 
           className="min-h-screen bg-background scroll-mt-[120]"
@@ -436,7 +405,6 @@ const Home = () => {
                 }}
                 viewport={{ once: true }}
               >
-                {/* Project 1 */}
                 <motion.div 
                   className="group bg-accent/10 rounded-xl overflow-hidden hover:bg-accent/20 transition-all duration-500 hover:shadow-2xl hover:shadow-accent/20"
                   initial={{ opacity: 0, y: 80, scale: 0.9 }}
@@ -521,7 +489,6 @@ const Home = () => {
                   </motion.div>
                 </motion.div>
                 
-                {/* Project 2 */}
                 <motion.div 
                   className="group bg-accent/10 rounded-xl overflow-hidden hover:bg-accent/20 transition-all duration-500 hover:shadow-2xl hover:shadow-accent/20"
                   initial={{ opacity: 0, y: 80, scale: 0.9 }}
@@ -606,7 +573,6 @@ const Home = () => {
                   </motion.div>
                 </motion.div>
                 
-                {/* Project 3 */}
                 <motion.div 
                   className="group bg-accent/10 rounded-xl overflow-hidden hover:bg-accent/20 transition-all duration-500 hover:shadow-2xl hover:shadow-accent/20"
                   initial={{ opacity: 0, y: 80, scale: 0.9 }}
@@ -703,7 +669,6 @@ const Home = () => {
           </div>
         </motion.section>
 
-        {/* Contact Section */}
         <motion.section 
           id="contact-section" 
           className="min-h-screen py-6 bg-background"
@@ -742,7 +707,6 @@ const Home = () => {
                 whileInView="animate"
                 viewport={{ amount: 0.1, once: true }}
               >
-                {/* Contact Form */}
                 <motion.div 
                   className="order-2 lg:order-1"
                   variants={animations.fadeInLeft}
@@ -885,7 +849,6 @@ const Home = () => {
                   </motion.form>
                 </motion.div>
                 
-                {/* Contact Information */}
                 <motion.div 
                   className="order-1 lg:order-2 space-y-8"
                   variants={animations.fadeInRight}
@@ -956,7 +919,6 @@ const Home = () => {
           </div>
         </motion.section>
 
-        {/* Footer */}
         <footer className="py-12 border-t border-accent/20">
           <div className="container mx-auto text-center">
             <p className="text-white/60">
@@ -967,7 +929,7 @@ const Home = () => {
             </p>
           </div>
         </footer>
-   </section>
+    </>
   );
 };
 
