@@ -12,17 +12,33 @@ const Nav = () => {
   const [activeSection, setActiveSection] = useState("hero-section");
 
   useEffect(() => {
+    let ticking = false;
+    
     const handleScroll = () => {
-      const sections = links.map(link => link.target);
-      const scrollPosition = window.scrollY + 120; // Offset for fixed header
+      if (!ticking) {
+        requestAnimationFrame(() => {
+          const sections = links.map(link => link.target);
+          const scrollPosition = window.scrollY + 120; // Offset for fixed header
 
-      for (let i = sections.length - 1; i >= 0; i--) {
-        const section = document.getElementById(sections[i]);
-        if (section && section.offsetTop <= scrollPosition) {
-          setActiveSection(sections[i]);
-          break;
-        }
-      
+          // Check if we're in the contact section first
+          const contactSection = document.getElementById('contact-section');
+          if (contactSection && contactSection.offsetTop <= scrollPosition) {
+            setActiveSection(''); // Clear active state when in contact section
+            ticking = false;
+            return;
+          }
+
+          // Otherwise, check the nav sections
+          for (let i = sections.length - 1; i >= 0; i--) {
+            const section = document.getElementById(sections[i]);
+            if (section && section.offsetTop <= scrollPosition) {
+              setActiveSection(sections[i]);
+              break;
+            }
+          }
+          ticking = false;
+        });
+        ticking = true;
       }
     };
 
@@ -53,7 +69,7 @@ const Nav = () => {
                 onClick={() => scrollToSection(link.target)}
                 className={`${
                   link.target === activeSection && "text-accent border-b-2 border-accent"
-                } capitalize font-medium hover:text-accent transition-all cursor-pointer bg-transparent border-0 p-0`}
+                } capitalize font-medium hover:text-accent transition-all duration-300 ease-in-out cursor-pointer bg-transparent border-0 p-0`}
               >
                 {link.name}
               </button>

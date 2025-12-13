@@ -2,6 +2,7 @@
 
 import Link from "next/link";
 import { Button } from "./ui/button";
+import { useState, useEffect } from "react";
 
 import Nav from "./Nav";
 import MobileNav from "./MobileNav";
@@ -9,6 +10,25 @@ import MobileNav from "./MobileNav";
 import { FaCoffee } from "react-icons/fa";
 
 const Header = () => {
+  const [activeSection, setActiveSection] = useState("hero-section");
+
+  useEffect(() => {
+    const handleScroll = () => {
+      const sections = ["hero-section", "about-section", "projects-section", "contact-section"];
+      const scrollPosition = window.scrollY + 120;
+
+      for (let i = sections.length - 1; i >= 0; i--) {
+        const section = document.getElementById(sections[i]);
+        if (section && section.offsetTop <= scrollPosition) {
+          setActiveSection(sections[i]);
+          break;
+        }
+      }
+    };
+
+    window.addEventListener('scroll', handleScroll);
+    return () => window.removeEventListener('scroll', handleScroll);
+  }, []);
   const scrollToSection = (targetId) => {
     const element = document.getElementById(targetId);
     if (element) {
@@ -33,18 +53,22 @@ const Header = () => {
             Minh<span className="text-accent"><FaCoffee className="inline w-2 h-2 translate-y-[8px]"/></span>
           </h1>
         </button>
-        {/* desktop nav */}
+        {/* Desktop nav */}
         <div className="hidden xl:flex items-center gap-8">
             <Nav />
             <Button 
-              className="cursor-pointer" 
+              className={`cursor-pointer transition-all duration-300 ease-in-out ${
+                activeSection === 'contact-section' 
+                  ? 'bg-background border border-primary text-primary hover:bg-accent/90' 
+                  : ''
+              }`}
               onClick={() => scrollToSection('contact-section')}
             >
               Contact Me!
             </Button>
         </div>
 
-        {/* mobile nav */}
+        {/* Mobile nav */}
         <div className="xl:hidden">
           <MobileNav />
         </div>
