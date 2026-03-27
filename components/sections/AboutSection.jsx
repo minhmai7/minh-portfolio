@@ -52,7 +52,7 @@ const AboutSection = () => {
               <h2 className="text-2xl font-semibold text-accent mb-6">Background</h2>
               <div className="bg-accent/10 p-5 rounded-lg space-y-4">
                 <p className="text-white/80 text-sm leading-relaxed">
-                  First-year student at UW Bothell planning to major in CSSE and Data Science.
+                  First-year student at UW Bothell majoring in CSSE: Information Assurance and Cybersecurity & Data Visualization.
                 </p>
                 <p className="text-white/70 text-sm leading-relaxed">
                   Looking for internships to grow my skills and contribute to meaningful projects.
@@ -68,7 +68,7 @@ const AboutSection = () => {
               <div className="space-y-3">
                 <div className="bg-accent/10 p-4 rounded-lg">
                   <h3 className="text-sm font-semibold text-accent mb-1">University of Washington, Bothell</h3>
-                  <p className="text-white/70 text-sm">Pre-Major</p>
+                  <p className="text-white/70 text-sm">CSSE: IAC & Data Visualization</p>
                   <p className="text-white/60 text-xs">Expected Graduation: 2029</p>
                 </div>
                 <div className="bg-accent/10 p-4 rounded-lg">

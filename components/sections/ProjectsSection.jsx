@@ -1,8 +1,72 @@
-import { motion } from "framer-motion";
+"use client";
+
+import { useCallback, useEffect, useMemo, useRef, useState } from "react";
+import { AnimatePresence, motion } from "framer-motion";
 import { Button } from "@/components/ui/button";
 import { animations } from "@/lib/animations";
+import { ChevronLeft, ChevronRight } from "lucide-react";
 
 const ProjectsSection = () => {
+  const scrollerRef = useRef(null);
+  const [canScrollLeft, setCanScrollLeft] = useState(false);
+  const [canScrollRight, setCanScrollRight] = useState(false);
+
+  const cardClassName = useMemo(() => {
+    return "group flex-none w-[340px] bg-accent/10 rounded-xl overflow-hidden hover:bg-accent/20 transition-all duration-500 hover:shadow-2xl hover:shadow-accent/20";
+  }, []);
+
+  const updateScrollState = useCallback(() => {
+    const scroller = scrollerRef.current;
+    if (!scroller) return;
+
+    const maxScrollLeft = scroller.scrollWidth - scroller.clientWidth;
+    const current = scroller.scrollLeft;
+    const epsilon = 2;
+
+    setCanScrollLeft(current > epsilon);
+    setCanScrollRight(current < maxScrollLeft - epsilon);
+  }, []);
+
+  const scrollByAmount = useCallback((direction) => {
+    const scroller = scrollerRef.current;
+    if (!scroller) return;
+
+    const amount = Math.max(280, Math.floor(scroller.clientWidth * 0.85));
+    scroller.scrollBy({ left: direction * amount, behavior: "smooth" });
+  }, []);
+
+  const handleScrollerKeyDown = useCallback((e) => {
+    if (e.key === "ArrowLeft") {
+      e.preventDefault();
+      scrollByAmount(-1);
+    }
+    if (e.key === "ArrowRight") {
+      e.preventDefault();
+      scrollByAmount(1);
+    }
+  }, [scrollByAmount]);
+
+  useEffect(() => {
+    const scroller = scrollerRef.current;
+    if (!scroller) return;
+
+    let rafId = 0;
+    const onScroll = () => {
+      cancelAnimationFrame(rafId);
+      rafId = requestAnimationFrame(updateScrollState);
+    };
+
+    updateScrollState();
+    scroller.addEventListener("scroll", onScroll, { passive: true });
+    window.addEventListener("resize", updateScrollState);
+
+    return () => {
+      cancelAnimationFrame(rafId);
+      scroller.removeEventListener("scroll", onScroll);
+      window.removeEventListener("resize", updateScrollState);
+    };
+  }, [updateScrollState]);
+
   return (
     <motion.section 
       id="projects-section" 
@@ -51,7 +115,7 @@ const ProjectsSection = () => {
           </motion.div>
           
           <motion.div 
-            className="grid md:grid-cols-2 lg:grid-cols-3 gap-8"
+            className="relative"
             initial={{ opacity: 0 }}
             whileInView={{ opacity: 1 }}
             transition={{ 
@@ -61,8 +125,57 @@ const ProjectsSection = () => {
             }}
             viewport={{ once: true }}
           >
+            <div className="flex items-center gap-4">
+              <div className="w-12 flex justify-center">
+                {canScrollLeft ? (
+                  <Button
+                    type="button"
+                    size="icon"
+                    variant="outline"
+                    aria-label="Scroll projects left"
+                    onClick={() => scrollByAmount(-1)}
+                  >
+                    <ChevronLeft className="size-5" />
+                  </Button>
+                ) : null}
+              </div>
+
+              <div className="relative flex-1 overflow-hidden">
+                <AnimatePresence initial={false}>
+                  {canScrollLeft ? (
+                    <motion.div
+                      key="fade-left"
+                      initial={{ opacity: 0 }}
+                      animate={{ opacity: 1 }}
+                      exit={{ opacity: 0 }}
+                      transition={{ duration: 0.25 }}
+                      className="pointer-events-none absolute left-0 top-0 h-full w-16 bg-gradient-to-r from-background to-transparent z-10"
+                    />
+                  ) : null}
+                </AnimatePresence>
+
+                <AnimatePresence initial={false}>
+                  {canScrollRight ? (
+                    <motion.div
+                      key="fade-right"
+                      initial={{ opacity: 0 }}
+                      animate={{ opacity: 1 }}
+                      exit={{ opacity: 0 }}
+                      transition={{ duration: 0.25 }}
+                      className="pointer-events-none absolute right-0 top-0 h-full w-16 bg-gradient-to-l from-background to-transparent z-10"
+                    />
+                  ) : null}
+                </AnimatePresence>
+
+                <div
+                  ref={scrollerRef}
+                  tabIndex={0}
+                  onKeyDown={handleScrollerKeyDown}
+                  className="no-scrollbar flex gap-8 overflow-x-auto scroll-smooth pb-4 focus:outline-none"
+                  aria-label="Projects scroller"
+                >
             <motion.div 
-              className="group bg-accent/10 rounded-xl overflow-hidden hover:bg-accent/20 transition-all duration-500 hover:shadow-2xl hover:shadow-accent/20"
+              className={cardClassName}
               initial={{ opacity: 0, y: 80, scale: 0.9 }}
               whileInView={{ opacity: 1, y: 0, scale: 1 }}
               transition={{ duration: 0.8, delay: 1.0, ease: "easeOut" }}
@@ -146,7 +259,7 @@ const ProjectsSection = () => {
             </motion.div>
             
             <motion.div 
-              className="group bg-accent/10 rounded-xl overflow-hidden hover:bg-accent/20 transition-all duration-500 hover:shadow-2xl hover:shadow-accent/20"
+              className={cardClassName}
               initial={{ opacity: 0, y: 80, scale: 0.9 }}
               whileInView={{ opacity: 1, y: 0, scale: 1 }}
               transition={{ duration: 0.8, delay: 1.2, ease: "easeOut" }}
@@ -230,7 +343,7 @@ const ProjectsSection = () => {
             </motion.div>
             
             <motion.div 
-              className="group bg-accent/10 rounded-xl overflow-hidden hover:bg-accent/20 transition-all duration-500 hover:shadow-2xl hover:shadow-accent/20"
+              className={cardClassName}
               initial={{ opacity: 0, y: 80, scale: 0.9 }}
               whileInView={{ opacity: 1, y: 0, scale: 1 }}
               transition={{ duration: 0.8, delay: 1.4, ease: "easeOut" }}
@@ -320,6 +433,107 @@ const ProjectsSection = () => {
                 </motion.div>
               </motion.div>
             </motion.div>
+
+            <motion.div 
+              className={cardClassName}
+              initial={{ opacity: 0, y: 80, scale: 0.9 }}
+              whileInView={{ opacity: 1, y: 0, scale: 1 }}
+              transition={{ duration: 0.8, delay: 1.6, ease: "easeOut" }}
+              whileHover={{ 
+                y: -10,
+                transition: { duration: 0.4, ease: "easeOut" }
+              }}
+              viewport={{ once: true }}
+            >
+              <motion.div 
+                className="h-48 bg-gradient-to-br from-accent/30 to-accent/10 flex items-center justify-center relative overflow-hidden"
+                whileHover={{ scale: 1.05 }}
+                transition={{ duration: 0.4 }}
+              >
+                <motion.div
+                  className="absolute inset-0 bg-gradient-to-r from-transparent via-white/10 to-transparent"
+                  initial={{ x: "-100%", skewX: -45 }}
+                  whileHover={{ x: "200%" }}
+                  transition={{ duration: 0.8 }}
+                />
+                <motion.span 
+                  className="text-2xl font-bold text-accent z-10"
+                  animate={{ 
+                    scale: [1, 1.05, 1],
+                    opacity: [0.7, 1, 0.7]
+                  }}
+                  transition={{ 
+                    duration: 2.4,
+                    repeat: Infinity,
+                    ease: "easeInOut"
+                  }}
+                >
+                  COMING SOON
+                </motion.span>
+              </motion.div>
+              <motion.div 
+                className="p-6"
+                initial={{ opacity: 0 }}
+                whileInView={{ opacity: 1 }}
+                transition={{ delay: 1.8, duration: 0.6 }}
+                viewport={{ once: true }}
+              >
+                <motion.h3 
+                  className="h3 mb-3 text-accent"
+                  whileHover={{ scale: 1.05 }}
+                  transition={{ duration: 0.2 }}
+                >
+                  QodeMe
+                </motion.h3>
+                <motion.p 
+                  className="text-white/70 mb-4 group-hover:text-white/90 transition-colors duration-300"
+                  initial={{ opacity: 0, y: 20 }}
+                  whileInView={{ opacity: 1, y: 0 }}
+                  transition={{ delay: 2.0, duration: 0.5 }}
+                  viewport={{ once: true }}
+                >
+                  A quizzing site for practicing coding skills and knowledge.
+                </motion.p>
+                <motion.div 
+                  className="flex flex-wrap gap-2 mb-4"
+                  initial={{ opacity: 0, scale: 0.8 }}
+                  whileInView={{ opacity: 1, scale: 1 }}
+                  transition={{ delay: 2.2, duration: 0.5 }}
+                  viewport={{ once: true }}
+                >
+                  <span className="px-3 py-1 bg-accent/20 text-accent text-sm rounded-full hover:bg-accent/30 transition-colors duration-200">In Progress</span>
+                  <span className="px-3 py-1 bg-accent/20 text-accent text-sm rounded-full hover:bg-accent/30 transition-colors duration-200">Web App</span>
+                  <span className="px-3 py-1 bg-accent/20 text-accent text-sm rounded-full hover:bg-accent/30 transition-colors duration-200">Full Stack</span>
+                </motion.div>
+                <motion.div 
+                  className="flex gap-3"
+                  initial={{ opacity: 0, y: 20 }}
+                  whileInView={{ opacity: 1, y: 0 }}
+                  transition={{ delay: 2.4, duration: 0.5 }}
+                  viewport={{ once: true }}
+                >
+                  <Button size="sm" variant="outline" className="px-3 py-0.5 hover:scale-105 transition-transform duration-200">Live Demo</Button>
+                  <Button size="sm" variant="outline" className="px-3 py-0.5 hover:scale-105 transition-transform duration-200">Code</Button>
+                </motion.div>
+              </motion.div>
+            </motion.div>
+                </div>
+              </div>
+
+              <div className="w-12 flex justify-center">
+                {canScrollRight ? (
+                  <Button
+                    type="button"
+                    size="icon"
+                    variant="outline"
+                    aria-label="Scroll projects right"
+                    onClick={() => scrollByAmount(1)}
+                  >
+                    <ChevronRight className="size-5" />
+                  </Button>
+                ) : null}
+              </div>
+            </div>
           </motion.div>
         </div>
       </div>
