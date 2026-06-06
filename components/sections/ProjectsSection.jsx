@@ -456,20 +456,13 @@ const ProjectsSection = () => {
                   whileHover={{ x: "200%" }}
                   transition={{ duration: 0.8 }}
                 />
-                <motion.span 
-                  className="text-2xl font-bold text-accent z-10"
-                  animate={{ 
-                    scale: [1, 1.05, 1],
-                    opacity: [0.7, 1, 0.7]
-                  }}
-                  transition={{ 
-                    duration: 2.4,
-                    repeat: Infinity,
-                    ease: "easeInOut"
-                  }}
-                >
-                  COMING SOON
-                </motion.span>
+                <motion.img
+                  src="/capycode.png"
+                  alt="QodeMe logo"
+                  className="relative z-10 h-80 w-80 object-contain"
+                  animate={{ scale: [1, 1.04, 1] }}
+                  transition={{ duration: 2.4, repeat: Infinity, ease: "easeInOut" }}
+                />
               </motion.div>
               <motion.div 
                 className="p-6"
